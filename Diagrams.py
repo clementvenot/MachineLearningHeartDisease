@@ -1,5 +1,7 @@
 
 import matplotlib.pyplot as plt
+from dataHeartDisease import  get_df
+df = get_df()
 
 
 # Variables numériques
