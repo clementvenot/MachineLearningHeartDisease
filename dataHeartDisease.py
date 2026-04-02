@@ -21,7 +21,7 @@ print(df.shape)
 # affiche les premières lignes du dataset
 print("------------------------------")
 print("Aperçu du dataset :")
-print(df.head())
+print(df.head(10))
 
 # affiche les noms des colonnes et les types de données
 print("------------------------------")
