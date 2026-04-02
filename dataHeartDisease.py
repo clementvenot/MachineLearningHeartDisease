@@ -14,6 +14,9 @@ y = heart_disease.data.targets
 df = pd.concat([X, y], axis=1)
 df['num_target'] = (df['num'] > 0).astype(int) # ajout num_target pour indiquer la présence ou l'absence de maladie cardiaque (binaire)
 
+# recuper toute les données du dataset
+def get_df():
+    return df
 
 # Affichage des informations sur le dataset
 
