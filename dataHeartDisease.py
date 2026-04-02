@@ -19,36 +19,27 @@ def get_df():
     return df
 
 # Affichage des informations sur le dataset
-
-"""
-
-# regarde la forme du dataset, les colonnes, les types de données et les valeurs manquantes
-print("Forme du dataset :")
-print(df.shape)
-
-# affiche les premières lignes du dataset
-print("------------------------------")
-print("Aperçu du dataset :")
-print(df.head(10))
-
-# affiche les noms des colonnes et les types de données
-print("------------------------------")
-print("Noms des colonnes :")
-print(df.columns)
-
-# affiche les types de données de chaque colonne
-print("------------------------------")
-print("Types de données par colonne :")
-print(df.dtypes)
-
-# affiche le nombre de valeurs manquantes pour chaque colonne
-print("------------------------------")
-print("Valeurs manquantes par colonne :")
-print(df.isnull().sum())
-
-# affiche les statistiques descriptives du dataset, y compris la moyenne, l'écart type, les valeurs minimales et maximales, etc.
-print("------------------------------")
-print("Statistiques descriptives :")
-print(df.describe())
-
-"""
+def show_info():
+    # regarde la forme du dataset, les colonnes, les types de données et les valeurs manquantes
+    print("Forme du dataset :")
+    print(df.shape)
+    print("------------------------------")
+    # affiche les premières lignes du dataset
+    print("Aperçu du dataset :")
+    print(df.head(10))
+    print("------------------------------")
+    # affiche les noms des colonnes et les types de données
+    print("Noms des colonnes :")
+    print(df.columns)
+    print("------------------------------")
+    # affiche les types de données de chaque colonne
+    print("Types de données par colonne :")
+    print(df.dtypes)
+    print("------------------------------")
+    # affiche le nombre de valeurs manquantes pour chaque colonne
+    print("Valeurs manquantes par colonne :")
+    print(df.isnull().sum())
+    print("------------------------------")
+    # affiche les statistiques descriptives du dataset, y compris la moyenne, l'écart type, les valeurs minimales et maximales, etc.
+    print("Statistiques descriptives :")
+    print(df.describe())

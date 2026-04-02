@@ -8,11 +8,12 @@ num_cols = df.select_dtypes(include=['int64', 'float64']).columns
 # Variables catégorielles
 cat_cols = df.select_dtypes(include=['object', 'category']).columns
 
-cat_cols = list(cat_cols) + ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal']
-num_cols = [col for col in num_cols if col not in cat_cols]
+cat_cols = list(cat_cols) + ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal'] # ajout des variables catégorielles 
+num_cols = [col for col in num_cols if col not in cat_cols] # mise à jour de num_cols pour exclure les variables catégorielles ajoutées
 
+# --------------------------------------------------------------
+# Affichage des histogrammes pour les variables numériques
 print("Numériques :", num_cols)
-print("Catégorielles :", cat_cols)
 
 for col in num_cols:
     plt.figure()
@@ -22,6 +23,10 @@ for col in num_cols:
     plt.ylabel("Fréquence")
     plt.show()
 
+# --------------------------------------------------------------
+# Variables catégorielles
+print("Catégorielles :", cat_cols)
+
 for col in cat_cols:
     plt.figure()
     df[col].value_counts().plot(kind='bar')
@@ -30,12 +35,20 @@ for col in cat_cols:
     plt.ylabel("Nombre")
     plt.show()
 
+# --------------------------------------------------------------
+# Analyse de la variable cible
+print("Variable cible (num) :")
+
 plt.figure()
 df['num'].value_counts().plot(kind='bar')
 plt.title("Distribution de la variable cible (num)")
 plt.xlabel("Classe")
 plt.ylabel("Nombre")
 plt.show()
+
+# --------------------------------------------------------------
+# Analyse de la variable cible binaire
+print("Variable cible binaire (num_target) :")
 
 plt.figure()
 df['num_target'].value_counts().plot(kind='bar')
