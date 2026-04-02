@@ -12,7 +12,10 @@ X = heart_disease.data.features
 y = heart_disease.data.targets
 
 df = pd.concat([X, y], axis=1)
-df['num_target'] = (df['num'] > 0).astype(int)
+df['num_target'] = (df['num'] > 0).astype(int) # ajout num_target pour indiquer la présence ou l'absence de maladie cardiaque (binaire)
+
+
+# Affichage des informations sur le dataset
 
 # regarde la forme du dataset, les colonnes, les types de données et les valeurs manquantes
 print("Forme du dataset :")
@@ -38,18 +41,7 @@ print("------------------------------")
 print("Valeurs manquantes par colonne :")
 print(df.isnull().sum())
 
-
-
-
-
-# affiche les informations sur le dataset, y compris les types de données et les valeurs manquantes
-print("Informations sur le dataset :")
-print(df.info())
-
-
-
-
-
 # affiche les statistiques descriptives du dataset, y compris la moyenne, l'écart type, les valeurs minimales et maximales, etc.
+print("------------------------------")
 print("Statistiques descriptives :")
 print(df.describe())
