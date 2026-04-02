@@ -1,15 +1,13 @@
 import matplotlib.pyplot as plt
-from dataHeartDisease import  get_df
-df = get_df()
+from dataHeartDisease import  get_df, get_num_cols, get_cat_cols
+from dataHotEncoding import get_encoded_df
 
-# Variables numériques
-num_cols = df.select_dtypes(include=['int64', 'float64']).columns
+#df = get_df()
+df = get_encoded_df() # Utilisation du dataset encodé
 
-# Variables catégorielles
-cat_cols = df.select_dtypes(include=['object', 'category']).columns
 
-cat_cols = list(cat_cols) + ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal'] # ajout des variables catégorielles 
-num_cols = [col for col in num_cols if col not in cat_cols] # mise à jour de num_cols pour exclure les variables catégorielles ajoutées
+cat_cols = get_cat_cols(df)
+num_cols = get_num_cols(df, cat_cols)
 
 # --------------------------------------------------------------
 # Affichage des histogrammes pour les variables numériques
