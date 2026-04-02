@@ -1,42 +1,37 @@
 import ssl
 import certifi
-
-ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
-
 from ucimlrepo import fetch_ucirepo
 import pandas as pd
 
-heart_disease = fetch_ucirepo(id=45)
+# Permet de contourner les problèmes de certificat SSL lors du téléchargement des données
+ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
-X = heart_disease.data.features
-y = heart_disease.data.targets
 
-df = pd.concat([X, y], axis=1)
-df['num_target'] = (df['num'] > 0).astype(int) # ajout num_target pour indiquer la présence ou l'absence de maladie cardiaque (binaire)
+# ----------------------------------------------------------------
+# ---------- Fonctions pour la manipulation des données ----------
+# ----------------------------------------------------------------
 
-# Variables numériques
-
-# Variables catégorielles
-
-# variable numérique : num
 def get_num_cols(df, cat_cols):
+    # variable numérique : age, trestbps, chol, thalach, oldpeak
     num_cols = df.select_dtypes(include=['int64', 'float64']).columns
     num_cols = [col for col in num_cols if col not in cat_cols] # mise à jour de num_cols pour exclure les variables catégorielles ajoutées
     
     return num_cols
 
-# variable catégorielle : sex, cp, fbs, restecg, exang, slope, ca, thal 
 def get_cat_cols(df):
+    # variable catégorielle : sex, cp, fbs, restecg, exang, slope, ca, thal 
     cat_cols = df.select_dtypes(include=['object', 'category']).columns
     cat_cols = list(cat_cols) + ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal'] # ajout des variables catégorielles 
     return cat_cols 
 
-# recuper toute les données du dataset
 def get_df():
+    # recuper toute les données du dataset
     return df
 
-# Affichage des informations sur le dataset
+
 def show_info(df):
+    # Affichage des informations sur le dataset
+    # -----------------------------------------
     # regarde la forme du dataset, les colonnes, les types de données et les valeurs manquantes
     print("Forme du dataset :")
     print(df.shape)
@@ -60,3 +55,19 @@ def show_info(df):
     # affiche les statistiques descriptives du dataset, y compris la moyenne, l'écart type, les valeurs minimales et maximales, etc.
     print("Statistiques descriptives :")
     print(df.describe())
+
+# ----------------------------------------------------------------
+# ----------- Chargement et préparation des données --------------
+# ----------------------------------------------------------------
+
+heart_disease = fetch_ucirepo(id=45)
+
+X = heart_disease.data.features
+y = heart_disease.data.targets
+
+df = pd.concat([X, y], axis=1) # df final avec les features et la variable cible
+
+# ajout num_target pour indiquer la présence ou l'absence de maladie cardiaque (binaire)
+df['num_target'] = (df['num'] > 0).astype(int) 
+
+#show_info(df)
