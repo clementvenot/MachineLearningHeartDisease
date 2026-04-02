@@ -20,6 +20,8 @@ def get_df():
 
 # Affichage des informations sur le dataset
 
+"""
+
 # regarde la forme du dataset, les colonnes, les types de données et les valeurs manquantes
 print("Forme du dataset :")
 print(df.shape)
@@ -48,3 +50,5 @@ print(df.isnull().sum())
 print("------------------------------")
 print("Statistiques descriptives :")
 print(df.describe())
+
+"""
