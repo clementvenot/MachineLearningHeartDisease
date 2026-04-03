@@ -6,28 +6,24 @@ import pandas as pd
 # Permet de contourner les problèmes de certificat SSL lors du téléchargement des données
 ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
-
 # ----------------------------------------------------------------
 # ---------- Fonctions pour la manipulation des données ----------
 # ----------------------------------------------------------------
-
 def get_num_cols(df, cat_cols):
-    # variable numérique : age, trestbps, chol, thalach, oldpeak
-    num_cols = df.select_dtypes(include=['int64', 'float64']).columns
-    num_cols = [col for col in num_cols if col not in cat_cols] # mise à jour de num_cols pour exclure les variables catégorielles ajoutées
-    
+    num_cols = df.select_dtypes(include=['int64', 'float64', 'bool']).columns
+    num_cols = [col for col in num_cols if col not in cat_cols]
     return num_cols
 
 def get_cat_cols(df):
-    # variable catégorielle : sex, cp, fbs, restecg, exang, slope, ca, thal 
-    cat_cols = df.select_dtypes(include=['object', 'category']).columns
-    cat_cols = list(cat_cols) + ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal'] # ajout des variables catégorielles 
+    # Colonnes catégorielles connues du dataset brut
+    expected_cat = ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal']
+    # garder uniquement celles présentes dans le df
+    cat_cols = [col for col in expected_cat if col in df.columns]
     return cat_cols 
 
 def get_df():
     # recuper toute les données du dataset
     return df
-
 
 def show_info(df):
     # Affichage des informations sur le dataset
@@ -59,7 +55,6 @@ def show_info(df):
 # ----------------------------------------------------------------
 # ----------- Chargement et préparation des données --------------
 # ----------------------------------------------------------------
-
 heart_disease = fetch_ucirepo(id=45)
 
 X = heart_disease.data.features
