@@ -21,12 +21,12 @@ def evaluate_models_with_cv(n_splits=5, random_state=42, test_size=0.2):
     Returns:
         pd.DataFrame: score moyen et ecart-type par modele
     """
-    # On reprend la base du script de classification: donnees preparees par le pipeline.
+    # Donnees preparees par le pipeline principal.
     data = prepare_data_for_ml(test_size=test_size, random_state=random_state)
     x_train = data["X_train"]
     y_train = data["y_train"]
 
-    # Meme liste de modeles que dans le script principal.
+    # Modeles compares.
     models = {
         "kNN": KNeighborsClassifier(n_neighbors=5),
         "LogisticRegression": LogisticRegression(max_iter=1000, random_state=random_state),
@@ -40,17 +40,12 @@ def evaluate_models_with_cv(n_splits=5, random_state=42, test_size=0.2):
         ),
     }
 
-    # Validation croisee stratifiee:
-    # - Le train est decoupe en 5 sous-ensembles (folds)
-    # - A chaque iteration: 4 folds pour entrainer, 1 fold pour valider
-    # - La stratification conserve la proportion 0/1 dans chaque fold
-    # - Le shuffle + random_state assurent un decoupage melange mais reproductible
+    # Validation croisee stratifiee en 5 folds.
     cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
 
     rows = []
     for model_name, model in models.items():
-        # cross_val_score entraine/valide automatiquement sur chaque fold
-        # et retourne un score d'accuracy par fold.
+        # Accuracy sur chaque fold.
         fold_scores = cross_val_score(
             model,
             x_train,
@@ -60,9 +55,7 @@ def evaluate_models_with_cv(n_splits=5, random_state=42, test_size=0.2):
             n_jobs=None,
         )
 
-        # On resume les resultats de CV par modele:
-        # - moyenne: performance globale attendue
-        # - ecart-type: stabilite du modele selon les folds
+        # Resume: moyenne et stabilite.
         rows.append(
             {
                 "model": model_name,

@@ -25,8 +25,7 @@ def prepare_data_for_ml(test_size=0.2, random_state=42):
     """
     df = get_df().copy()
 
-    # Cree une cible binaire a partir de la colonne multiclasses `num` si necessaire.
-    # 1 = presence de maladie, 0 = absence.
+    # Cible binaire: 1 = maladie, 0 = absence.
     if "num_target" not in df.columns:
         df["num_target"] = (df["num"] > 0).astype(int)
 
@@ -42,13 +41,11 @@ def prepare_data_for_ml(test_size=0.2, random_state=42):
         stratify=y,
     )
 
-    # 2) SMOTE ne fonctionne qu'avec des donnees numeriques.
-    # On convertit d'abord; les valeurs non convertibles deviennent NaN.
+    # 2) Conversion numerique avant imputation.
     X_train_numeric = X_train.apply(pd.to_numeric, errors="coerce")
     X_test_numeric = X_test.apply(pd.to_numeric, errors="coerce")
 
-    # Puis on impute en une seule passe (train -> test) avec `most_frequent`.
-    # Cette etape couvre a la fois les NaN d'origine et ceux crees par conversion.
+    # Imputation train -> test avec la strategie most_frequent.
     imputer = SimpleImputer(strategy="most_frequent")
     X_train_imputed = pd.DataFrame(
         imputer.fit_transform(X_train_numeric),
@@ -61,9 +58,7 @@ def prepare_data_for_ml(test_size=0.2, random_state=42):
         index=X_test_numeric.index,
     )
 
-    # 3) Reequilibrage avec SMOTE sur train uniquement.
-    # On genere des exemples synthetiques de la classe minoritaire sans toucher
-    # au test, afin de conserver une evaluation representative du monde reel.
+    # 3) Reequilibrage avec SMOTE (train uniquement).
     smote = SMOTE(random_state=random_state) 
     X_train_balanced, y_train_balanced = smote.fit_resample(X_train_imputed, y_train) 
     X_train_balanced = pd.DataFrame(X_train_balanced, columns=X_train_imputed.columns) 
@@ -73,23 +68,18 @@ def prepare_data_for_ml(test_size=0.2, random_state=42):
     cat_cols = get_cat_cols(X_train_balanced)
     num_cols = get_num_cols(X_train_balanced, cat_cols)
 
-    # 5) Encodage one-hot: transforme les categories en colonnes binaires
-    # exploitables par la plupart des algorithmes de ML.
+    # 5) Encodage one-hot.
     X_train_encoded = pd.get_dummies(X_train_balanced, columns=cat_cols, drop_first=True)
     X_test_encoded = pd.get_dummies(X_test_imputed, columns=cat_cols, drop_first=True)
 
-    # 6) Alignement train/test:
-    # - garantit le meme ordre et le meme nombre de features
-    # - ajoute les colonnes absentes dans test avec 0
-    # Ceci evite les erreurs de dimension au moment du fit/predict.
+    # 6) Alignement des colonnes train/test.
     X_train_aligned, X_test_aligned = X_train_encoded.align(
         X_test_encoded,
         join="left",
         axis=1,
         fill_value=0,
     )
-    # 7) Normalisation des colonnes numeriques uniquement.
-    # Le scaler est ajuste sur train puis applique a test pour eviter la fuite.
+    # 7) Normalisation des colonnes numeriques.
     num_cols_to_scale = [col for col in num_cols if col in X_train_aligned.columns]
     scaler = StandardScaler()
     X_train_aligned[num_cols_to_scale] = scaler.fit_transform(X_train_aligned[num_cols_to_scale])

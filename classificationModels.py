@@ -14,26 +14,15 @@ from dataPreparation import prepare_data_for_ml
 
 def evaluate_classification_models(test_size=0.2, random_state=42):
     """Entraine et compare plusieurs modeles de classification sur les donnees de maladie cardiaque."""
-    # On recupere les donnees deja preparees par le pipeline.
-    # Cela garantit que tous les modeles recoivent exactement les memes features.
     data = prepare_data_for_ml(test_size=test_size, random_state=random_state)
     x_train = data["X_train"]
     x_test = data["X_test"]
     y_train = data["y_train"]
     y_test = data["y_test"]
 
-    # Dossier de sortie pour les matrices de confusion.
     output_dir = Path("results/confusion_matrices")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Liste des modeles testes dans l'etude.
-    # Le but est de comparer des approches differentes:
-    # - distance (kNN)
-    # - lineaire (regression logistique)
-    # - arbre de decision
-    # - methode a noyau (SVM)
-    # - probabiliste (Naive Bayes)
-    # - reseau de neurones (MLP)
     models = {
         "kNN": KNeighborsClassifier(n_neighbors=5),
         "LogisticRegression": LogisticRegression(max_iter=1000, random_state=random_state),
@@ -48,16 +37,11 @@ def evaluate_classification_models(test_size=0.2, random_state=42):
     }
     
 
-    # Cette liste va stocker les resultats de chaque modele.
     rows = []
     for model_name, model in models.items():
-        # Entrainement du modele sur le jeu d'apprentissage.
         model.fit(x_train, y_train)
-
-        # Prediction sur le jeu de test pour evaluer la capacite de generalisation.
         y_pred = model.predict(x_test)
 
-        # Trace et sauvegarde la matrice de confusion pour ce modele.
         cm = confusion_matrix(y_test, y_pred)
         fig, ax = plt.subplots(figsize=(5, 4))
         display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0, 1])
@@ -74,17 +58,14 @@ def evaluate_classification_models(test_size=0.2, random_state=42):
 
         rows.append(row)
 
-    # Conversion des resultats en DataFrame pour obtenir un tableau lisible.
-    # Le tri par accuracy permet de classer les modeles du meilleur au moins bon.
+    # Tri des modeles par accuracy decroissante.
     results = pd.DataFrame(rows).sort_values(by="accuracy", ascending=False).reset_index(drop=True)
     return results
 
 
 if __name__ == "__main__":
-    # Execution du script en ligne de commande: on calcule les performances des modeles.
     results_df = evaluate_classification_models()
 
-    # Parametrage d'affichage pour voir toutes les colonnes dans le terminal.
     pd.set_option("display.max_columns", None)
     pd.set_option("display.width", 120)
 
