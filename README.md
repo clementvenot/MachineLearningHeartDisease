@@ -1,3 +1,4 @@
+
 ***
 
 # Heart Disease Prediction - Machine Learning
@@ -16,6 +17,8 @@ The target variable `num` is converted to a binary target:
 
 - `0`: no disease
 - `1`: disease present (`num > 0`)
+
+<img width="451" height="129" alt="image" src="https://github.com/user-attachments/assets/d1e0767a-f0ee-4367-9528-8daf446f6e8f" />
 
 ***
 
@@ -36,13 +39,8 @@ The pipeline in [dataPreparation.py](dataPreparation.py) follows these steps:
 - Visualizations: [Diagrams.py](Diagrams.py)
 - Correlation matrix: [correlationMatrix.py](correlationMatrix.py)
 
-[Histograms of numerical variables]
-
-[Bar charts of categorical variables]
-
-[Target variable distribution]
-
-[Correlation matrix heatmap]
+<img width="1314" height="433" alt="Screenshot 2026-04-10 at 15 14 01" src="https://github.com/user-attachments/assets/a538630c-7a83-479b-b75e-d5bea0b1be3a" />
+<img width="906" height="399" alt="Screenshot 2026-04-10 at 15 14 47" src="https://github.com/user-attachments/assets/52ff925a-acec-4666-bb73-fad924c1f2bd" />
 
 ## Tested Models
 
@@ -55,17 +53,18 @@ In [classificationModels.py](classificationModels.py):
 - Naive Bayes
 - MLPClassifier
 
-Confusion matrices are saved in [results/confusion_matrices](results/confusion_matrices).
 
-[Test set performance summary]
-
-[Best model confusion matrix]
+<img width="171" height="82" alt="image" src="https://github.com/user-attachments/assets/8b992100-49b8-4d49-b03e-302374b31c81" />
 
 ## Cross-Validation
 
 In [classificationModelsCV.py](classificationModelsCV.py): 5-fold stratified cross-validation with accuracy (mean and standard deviation per model).
 
-[Cross-validation chart]
+<img width="222" height="81" alt="image" src="https://github.com/user-attachments/assets/ba9568a9-9252-4258-a2a1-3e8ea7517c68" />
+
+Confusion matrices are saved in [results/confusion_matrices](results/confusion_matrices).
+
+<img width="191" height="153" alt="image" src="https://github.com/user-attachments/assets/b4aeccc0-8ccc-48bb-b568-d38deb2b01cf" /><img width="191" height="153" alt="image" src="https://github.com/user-attachments/assets/27ee1410-4e8c-46e2-9a3e-733390296f6d" />
 
 ***
 
@@ -73,10 +72,6 @@ In [classificationModelsCV.py](classificationModelsCV.py): 5-fold stratified cro
 
 There is no license; you're free to use it.
 
----
-
 Feel free to contribute to this project by submitting issues or pull requests.
 
 For any questions or support, please contact [Clément Venot](mailto:clement.venooot@gmail.com).
-
----
